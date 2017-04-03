@@ -1,4 +1,7 @@
-/*var mymod=require('./ls_module');
+/*
+
+
+var mymod=require('./ls_module');
 
 mymod(process.argv[2],process.argv[3],function (err,data) {
     if(err){
@@ -9,8 +12,10 @@ mymod(process.argv[2],process.argv[3],function (err,data) {
         }
     }
 });
-*/
-/*var htp=require('http');
+
+
+
+var htp=require('http');
 const BufferList = require('bl');
 var bl1 = new BufferList();
 var bl2 = new BufferList();
@@ -61,8 +66,11 @@ function call() {
         console.log(bl2.toString());
         console.log(bl3.toString());
     }
-}*/
-/*var net=require('net');
+}
+
+
+
+var net=require('net');
 var data;
 var date=new Date();
 var hr=date.getHours(),mn=date.getMinutes().valueOf(),dt=date.getDate(),mnth=date.getMonth();
@@ -81,13 +89,62 @@ var server= net.createServer(function (socket) {
     data=date.getFullYear()+'-'+mnth+'-'+dt+' '+hr+':'+mn+'\n';
     socket.end(data);
 });
-server.listen(process.argv[2]);*/
-/*var http=require('http');
+server.listen(process.argv[2]);
+
+
+
+var https=require('http');
 var fs=require('fs');
 
 var readable = fs.createReadStream(process.argv[3]);
 
-var server = http.createServer(function (requst,responce) {
+var server1 = https.createServer(function (requst,responce) {
     readable.pipe(responce);
 });
-server.listen(process.argv[2]);*/
+server1.listen(process.argv[2]);
+
+
+
+var httpz=require('http');
+var map=require('through2-map');
+
+httpz.createServer(function (request,responce) {
+    if(request.method==='POST'){
+        request.pipe(map(function (chunk) {
+            return chunk.toString().toUpperCase();
+        })).pipe(responce);
+    }
+}).listen(process.argv[2]);
+
+
+
+var url=require('url');
+var http=require('http');
+
+
+http.createServer(function (req,res) {
+    var data =new Date(url.parse(req.url,true).query.iso.toString());
+    var hr=data.getHours(),mn=data.getMinutes(),sc=data.getSeconds();
+    var out;
+    var dat={
+        "hour": '',
+        "minute": '',
+        "second": ''
+    };
+    dat.hour=hr;
+    dat.minute=mn;
+    dat.second=sc;
+    var unix={ "unixtime" : '' };
+    unix.unixtime=data.getTime();
+    if(url.parse(req.url,true).pathname==="/api/parsetime"){
+        x=dat;
+    }
+    else if (url.parse(req.url,true).pathname==="/api/unixtime"){
+        x=unix;
+    }
+    else{
+        x="url is wrongly formated";
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(x));
+}).listen(process.argv[2]);*/
